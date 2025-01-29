@@ -1,0 +1,25 @@
+.btn{
+    background-color: var(--white);
+    border: 1px solid var(--theme);
+    text-align: center;
+    margin: 20px;
+    padding:5px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+}
+.btn:hover{
+    color: var(--white);
+    background-color: var(--theme);
+}
+.blue-btn{
+    color: var(--white);
+    background-color: var(--theme);
+    transition: all 0.3s ease;
+}
+
+.blue-btn:hover{
+    color: var(--theme);
+    background-color: var(--white);
+    border: 1px solid var(--theme);
+}

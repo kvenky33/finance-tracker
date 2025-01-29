@@ -1,0 +1,27 @@
+.nav{
+    background-color: var(--theme);
+    color: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.nav .head-text{
+    font-weight: 500;
+    padding: 10px 5px;
+    margin: 0 20px;
+    font-size: 24px;
+}
+.nav .link{
+    opacity: 0.8;
+    cursor: pointer;
+    transition: all 0.4s ease;
+
+}
+.nav .link:hover{
+   opacity: 1;
+
+}
