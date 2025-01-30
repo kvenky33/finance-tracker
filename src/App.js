@@ -1,7 +1,7 @@
 import React from 'react'
 import "./App.css"
 import Signup from "./pages/Signup"
-import Dahboard from "./pages/Dashboard"
+import Dashboard from "./pages/Dashboard"
 import {BrowserRouter, Routes,Route } from 'react-router-dom'
 import { ToastContainer,Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,7 +24,7 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Signup/>} />
-        <Route path='/dashboard' element={<Dahboard/>} />
+        <Route path='/dashboard' element={<Dashboard/>} />
       </Routes>
     </BrowserRouter>
     </>

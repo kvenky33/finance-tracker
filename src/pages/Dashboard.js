@@ -15,6 +15,11 @@ const Dashboard = () => {
 
   const [transactions,setTransactions] = useState([])
   const [loading,setLoading] = useState(false)
+
+  const[income,setIncome] = useState(0);
+  const[expense,setExpense] = useState(0);
+  const[currentBalance,setCurrentBalance] = useState(0);
+
   const showExpenseModal =()=>{
     setIsExpenseModalVisible(true)
   }
@@ -80,12 +85,37 @@ const fetchTansactions = async () => {
   }
 }
 
+//  Income, expense and Total Balance
+useEffect(()=>{
+calcualteBalance()
+},[transactions])
+
+const calcualteBalance =()=>{
+  let totalIncome =0
+  let totalExpense =0
+  transactions.map((transaction)=>{
+    if(transaction.type==='income')
+       totalIncome += transaction.amount
+     else
+       totalExpense += transaction.amount 
+  })
+  setIncome(totalIncome)
+  setExpense(totalExpense)
+  setCurrentBalance(totalIncome-totalExpense)
+}
+
+
   return (
     <div>
       <Header/>
       {loading? <p>Loading...</p>: 
         <>
-          <Cards  showExpenseModal={showExpenseModal} showIncomeModal={showIncomeModal} />
+          <Cards  showExpenseModal={showExpenseModal} 
+          showIncomeModal={showIncomeModal} 
+          income={income}
+          expense={expense}
+          currentBalance={currentBalance}
+          />
           <AddExpenses isExpenseModalVisible={isExpenseModalVisible} closeExpenseModal={closeExpenseModal} onFinish={onFinish} />
           <AddIncome isIncomeModalVisible={isIncomeModalVisible} closeIncomeModal={closeIncomeModal} onFinish={onFinish} />
         </>
