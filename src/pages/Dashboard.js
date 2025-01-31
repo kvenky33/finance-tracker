@@ -8,6 +8,7 @@ import { addDoc, collection, getDocs, query } from 'firebase/firestore'
 import { auth, db } from '../firebase'
 import { toast } from 'react-toastify'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import TransactionTable from '../TransactionTable'
 const Dashboard = () => {
   const [user] = useAuthState(auth)
   const [isExpenseModalVisible,setIsExpenseModalVisible] = useState(false)
@@ -52,6 +53,11 @@ const Dashboard = () => {
         transaction
       )
       toast.success("Transaction Added!")
+      let newArr = transactions
+      newArr.push(transaction)
+      setTransactions(newArr)
+      calcualteBalance()
+
     } catch (error) {
       console.log(error)
       toast.error("Couldn't add Transaction!")
@@ -76,7 +82,7 @@ const fetchTansactions = async () => {
       });
       setTransactions(transactionArray)
       toast.success("Transactions Fetched!")
-      console.log(transactionArray)
+      // console.log(transactionArray)
       setLoading(false)
     }
    
@@ -118,6 +124,7 @@ const calcualteBalance =()=>{
           />
           <AddExpenses isExpenseModalVisible={isExpenseModalVisible} closeExpenseModal={closeExpenseModal} onFinish={onFinish} />
           <AddIncome isIncomeModalVisible={isIncomeModalVisible} closeIncomeModal={closeIncomeModal} onFinish={onFinish} />
+          <TransactionTable transactions={transactions}/>
         </>
       }
      </div>
