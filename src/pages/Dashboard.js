@@ -3,7 +3,6 @@ import Header from "../components/Header"
 import Cards from '../components/Cards'
 import AddExpenses from '../components/modals/addexpense'
 import AddIncome from '../components/modals/addincome'
-import moment from 'moment'
 import { addDoc, collection, getDocs, query } from 'firebase/firestore'
 import { auth, db } from '../firebase'
 import { toast } from 'react-toastify'
@@ -16,7 +15,6 @@ const Dashboard = () => {
 
   const [transactions,setTransactions] = useState([])
   const [loading,setLoading] = useState(false)
-
   const[income,setIncome] = useState(0);
   const[expense,setExpense] = useState(0);
   const[currentBalance,setCurrentBalance] = useState(0);
@@ -38,7 +36,7 @@ const Dashboard = () => {
      const newTransaction = {
       type: type,
       amount:parseFloat(values.amount),
-      date:moment(values.date).format("YYYY-MM-DD"),
+      date:(values.date).format("YYYY-MM-DD"),
       tag:values.tag,
       name:values.name
      }
@@ -66,7 +64,7 @@ const Dashboard = () => {
 
   useEffect(()=>{
     fetchTansactions()
-  },[])
+  },[user])
 
 //  Fetching all the transactions 
 const fetchTansactions = async () => {
