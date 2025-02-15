@@ -44,13 +44,14 @@ const Dashboard = () => {
   }
 
   //   add a transation for the user in the collection
-  const  addTransaction = async (transaction) => {
+  const  addTransaction = async (transaction,many) => {
     try {
       const docRef = await addDoc(
         collection(db,`users/${user.uid}/transactions`),
         transaction
       )
-      toast.success("Transaction Added!")
+      if(!many)
+        toast.success("Transaction Added!")
       let newArr = transactions
       newArr.push(transaction)
       setTransactions(newArr)
@@ -58,7 +59,8 @@ const Dashboard = () => {
 
     } catch (error) {
       console.log(error)
-      toast.error("Couldn't add Transaction!")
+      if(!many)
+        toast.error("Couldn't add Transaction!")
     }
   }
 
@@ -122,7 +124,7 @@ const calcualteBalance =()=>{
           />
           <AddExpenses isExpenseModalVisible={isExpenseModalVisible} closeExpenseModal={closeExpenseModal} onFinish={onFinish} />
           <AddIncome isIncomeModalVisible={isIncomeModalVisible} closeIncomeModal={closeIncomeModal} onFinish={onFinish} />
-          <TransactionTable transactions={transactions}/>
+          <TransactionTable transactions={transactions} addTransaction={addTransaction} fetchTansactions={fetchTansactions}/>
         </>
       }
      </div>

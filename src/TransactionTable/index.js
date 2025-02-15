@@ -2,8 +2,10 @@ import React,{useState} from 'react'
 import { Table,Select,Radio } from 'antd';
 import searchImg from '../assets/search.svg'
 import './style.css'
+import { parse, unparse } from 'papaparse';
+import { toast } from 'react-toastify';
 
-const TransactionTable = ({transactions}) => {
+const TransactionTable = ({transactions,addTransaction,fetchTansactions}) => {
   const {Option} = Select
     const [search,setSearch] = useState('')
     const [typeFilter,setTypeFilter] =  useState('')
@@ -54,6 +56,47 @@ const TransactionTable = ({transactions}) => {
       }
     })
       
+    // export to csv
+   const exportCSV = ()=>{
+    var csv = unparse({
+      "fields": ['name','type','date','tag','amount'],
+       "data" :transactions
+    });
+     
+    const data = new Blob([csv], {type: 'text/csv;charset=utf-8'});
+    const  csvURL = window.URL.createObjectURL(data);
+    const Link = document.createElement('a');
+    Link.href = csvURL;
+    Link.download = 'transactions.csv'; 
+    document.body.appendChild(Link)
+    Link.click();
+    document.body.removeChild(Link)
+
+   }
+
+  //  Import from csv
+
+  const importCSV = (event)=>{
+    event.preventDefault();
+    try{
+      parse(event.target.files[0],{
+        header:true,
+        complete: async function (results) {
+          for(const transaction of results.data){
+            const newTransaction = {...transaction,amount:parseInt(transaction.amount)}
+            await addTransaction(newTransaction,true)
+          }   
+        }
+      })
+      toast.success('All transactions added')
+      fetchTansactions()
+      event.target.files = null
+    }
+    catch(e){
+      toast.error(e.message)
+    }
+
+  }
      
   return (
     <>
@@ -78,8 +121,9 @@ const TransactionTable = ({transactions}) => {
             <Radio.Button value="amount">Sort by Amount</Radio.Button>
           </Radio.Group>
           <div className='csv-btns'>
-            <button className='btn'>Export to CSV</button>
-            <button className='btn blue-btn'>Import from CSV</button>
+            <button className='btn' onClick={exportCSV}>Export to CSV</button>
+            <label className='btn blue-btn' for="file-csv">Import from CSV</label>
+            <input type='file' id='file-csv' accept='.CSV' required  onChange={importCSV} style={{display:"none"}}/>
           </div>
       </div>
     <Table dataSource={sortedTransaction} columns={columns} />
